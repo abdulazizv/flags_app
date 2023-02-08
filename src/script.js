@@ -4,6 +4,7 @@ let them = document.querySelector("#them");
 let header = document.querySelector("header");
 let wrapperCards = document.querySelector(".card__wrapper");
 let select = document.querySelector('#region')
+let searchInput = document.querySelector('#search')
 /// theme script started: dark and light mode ///
 them.addEventListener("input", (e) => {
   localStorage.setItem("them", e.target.checked);
@@ -89,6 +90,7 @@ function filterRegion(data) {
   })
 
   region.sort()
+  console.log(region)
   region.forEach((item) => {
     const option = createElement('option','item',item); 
     select.append(option);
@@ -112,3 +114,28 @@ select.addEventListener('change',(e) => {
 
 
   // ------ - --------- Dynamic continents ended =------------------------------//
+
+async function searchCountries(country) {
+  try {
+    const response = await fetch(`${searchURL}/${country}`)
+    const result = await response.json();
+    if(response.status == 200){
+      renderCards(result)
+    } else {
+      wrapperCards.innerHTML = `<h1 class ="uppercase text-4xl text-red-600 text-center">Not found such as country</h1>`
+    }
+  } catch (error) {
+    console.log(err);
+  }
+}
+
+ searchInput.addEventListener('keyup',(e) => {
+  wrapperCards.innerHTML = ``
+  if(e.target.value.trim().length > 0){
+    searchCountries(e.target.value)
+  } else {
+    searchInput.setAttribute('placeholder','Please select country')
+    getAllCountries()
+  }
+ })
+ 
