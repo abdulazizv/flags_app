@@ -89,6 +89,7 @@ function filterRegion(data) {
 
   region.forEach((item) => {
     const option = createElement('option','item',item); 
+    select.append(option);
   })
 }
 
