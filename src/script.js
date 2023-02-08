@@ -3,7 +3,7 @@
 let them = document.querySelector("#them");
 let header = document.querySelector("header");
 let wrapperCards = document.querySelector(".card__wrapper");
-
+let select = document.querySelector('#region')
 /// theme script started: dark and light mode ///
 them.addEventListener("input", (e) => {
   localStorage.setItem("them", e.target.checked);
@@ -35,10 +35,9 @@ const getAllCountries = async () => {
   try {
     const response = await fetch(baseURL);
     const result = await response.json();
+    filterRegion(result);
     if (response.status === 200) {
-      setTimeout(() => {
         renderCards(result)
-      },0);
     } else {
         alert(response.status)
     }
@@ -76,3 +75,21 @@ function renderCards(cards) {
     wrapperCards.appendChild(card);
   });
 }
+
+/// ---- ---- Dynamic continents ------
+
+
+function filterRegion(data) {
+  const region = []
+  data.forEach((item) => {
+    if(!region.includes(item.region)) {
+      region.push(item.region);
+    }
+  })
+
+  region.forEach((item) => {
+    const option = createElement('option','item',item); 
+  })
+}
+
+filterRegion()
