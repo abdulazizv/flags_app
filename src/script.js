@@ -29,7 +29,8 @@ changeMode();
 // =--- --------------------------- Dynamic mode     --- -/
 
 let baseURL = "https://restcountries.com/v2/all";
-
+let filterURL= "https://restcountries.com/v2/region";
+let searchURL = "https://restcountries.com/v2/name";
 const getAllCountries = async () => {
   wrapperCards.innerHTML = `<span class="loader"></span>`
   try {
@@ -83,14 +84,31 @@ function filterRegion(data) {
   const region = []
   data.forEach((item) => {
     if(!region.includes(item.region)) {
-      region.push(item.region);
+      region.push(item.region);  
     }
   })
 
+  region.sort()
   region.forEach((item) => {
     const option = createElement('option','item',item); 
     select.append(option);
   })
 }
 
-filterRegion()
+
+async function filterRegions(region) {
+  wrapperCards.innerHTML = `<span class="loader"></span>`
+  const response = await fetch(`${filterURL}/${region}`);
+  const arr = await response.json();
+  console.log(arr)
+  
+  renderCards(arr);
+}
+select.addEventListener('change',(e) => {
+    wrapperCards.innerHTML = ''
+    console.log(e.target.value)
+    filterRegions(e.target.value);
+  })
+
+
+  // ------ - --------- Dynamic continents ended =------------------------------//
